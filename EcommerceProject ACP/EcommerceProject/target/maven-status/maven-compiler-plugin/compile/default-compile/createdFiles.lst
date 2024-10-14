@@ -1,0 +1,10 @@
+com\mycompany\ecommerceproject\inventory.class
+com\mycompany\ecommerceproject\EcommerceProject.class
+com\mycompany\ecommerceproject\customer.class
+com\mycompany\ecommerceproject\inventorys.class
+com\mycompany\ecommerceproject\orderitem.class
+com\mycompany\ecommerceproject\order.class
+com\mycompany\ecommerceproject\admin.class
+com\mycompany\ecommerceproject\payment.class
+com\mycompany\ecommerceproject\product.class
+com\mycompany\ecommerceproject\user.class
