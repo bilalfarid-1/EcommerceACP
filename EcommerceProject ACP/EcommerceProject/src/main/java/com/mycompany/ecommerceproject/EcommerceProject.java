@@ -1,16 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- */
-
 package com.mycompany.ecommerceproject;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-/**
- *
- * @author Abdullah
- */
+
 public class EcommerceProject {
     static Scanner input= new Scanner(System.in);
     
