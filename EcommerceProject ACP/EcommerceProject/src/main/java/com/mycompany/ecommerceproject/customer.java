@@ -1,73 +1,20 @@
 
 package com.mycompany.ecommerceproject;
 
-import java.util.ArrayList;
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
 public class customer extends user {
-
+    private product Product = new product();
     static Scanner input = new Scanner(System.in);
-    order orders = new order();
-    orderitem orderitems = new orderitem();
+    order Order = new order();
 
-    public customer(String username, String password) {
-        super(username, password);
+    public customer(){
+        
     }
-
-    public void orderproducts(inventory Inventory) {
-        boolean check = false;
-        String ordername = null;
-        int quantity = 0;
-        ArrayList<product> products = Inventory.returnproducts();
-        if (products.size() > 0) {
-            System.out.println("Choose Product for order.");
-        } else {
-            System.out.println("No Product show");
-        }
-        for (int i = 0; i < products.size(); i++) {
-            product Products = products.get(i);
-            System.out.println("\nProduct " + i + 1);
-            System.out.println("Id " + Products.getId());
-            System.out.println("Name " + Products.getName());
-            System.out.println("Price " + Products.getPrice());
-            System.out.println("Stock Qty " + Products.getStockQuantity() + "\n");
-        }
-        if (products.size() > 0) {
-            System.out.println("Enter Product number for order: ");
-            int num = input.nextInt();
-            System.out.println("Enter Quantity: ");
-            quantity = input.nextInt();
-            String choice = "N";
-
-            do {
-                for (int i = 0; i < products.size(); i++) {
-                    product Products = products.get(i);
-                    if (num == Products.getId()) {
-                        if (quantity <= Products.getStockQuantity()) {
-                            check = true;
-                            ordername = Products.getName();
-                            break;
-                        } else {
-                            System.out.println("Available quantiy is " + Products.getStockQuantity());
-                        }
-                    }
-                }
-                if (check == true) {
-                    System.out.println("Product added to cart");
-                    orders.additem(orderitems, ordername, quantity);
-                    System.out.println("\nEnter \"Y\" for add more \"N\" ");
-                    choice = input.next();
-                }
-
-            } while (!choice.equalsIgnoreCase("N"));
-        }
-    }
-
-    public void displaymenu(inventory Inventory) {
+    public void menu() {
         int choice = 0;
-
         do {
             System.out.println("Enter 1 to order");
             System.out.println("Enter 2 for view cart");
@@ -76,17 +23,55 @@ public class customer extends user {
             try {
                 choice = input.nextInt();
                 if (choice == 1) {
-                    orderproducts(Inventory);
+                    Product.viewallproducts();
+                    Order.addtocart();
                 } else if (choice == 2) {
-                    orders.viewcart(orderitems);
+                    Order.viewcart();
                 } else if (choice == 3) {
-
+                    Order.checkout();
                 } else {
 
                 }
-            } catch (InputMismatchException e) {
+            }catch (InputMismatchException e) {
                 System.out.println("enter a valid number.");
             }
         } while (choice != 4);
+    }
+    
+    @Override
+    public void login() {
+        System.out.println("Enter Customer Username:");
+        username=input.next();
+        System.out.println("Enter Customer Password:");
+        password=input.next();
+        
+        if (matchCredentials(username, password, "customerData.txt")) {
+            System.out.println("\nYou logged in as Customer...\n");
+            menu();
+        } else {
+            System.out.println("Invalid credentials.");
+        }
+    }
+    
+    @Override
+    public void register(){
+        System.out.println("Enter Customer Username:");
+        username=input.next();
+        System.out.println("Enter Customer Password:");
+        password=input.next();
+        try{
+        FileWriter Fw = new FileWriter("customerData.txt",true);
+        Fw.write(username+","+password);
+        Fw.close();
+        }catch(IOException e){
+            System.out.println("Error to save data "+e);
+        }
+    }
+    public customer(String username, String password) {
+        super(username, password);
+    }
+
+    public void orderproducts() {
+        
     }
 }
