@@ -1,37 +1,100 @@
 
 package com.mycompany.ecommerceproject;
 
-import java.util.ArrayList;
+import java.io.*;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 
 public class order {
 
-    private ArrayList<orderitem> Orderitems = new ArrayList<>();
+    Scanner input = new Scanner(System.in);
     private int id;
-    private customer customer;
 
-    public order(int id, customer customer) {
+    public order(int id) {
         this.id = id;
-        this.customer = customer;
     }
 
     public order() {
     }
 
-    public void additem(orderitem orderitems, String ordername, int quantity) {
-        orderitems = new orderitem(ordername, quantity);
-        Orderitems.add(orderitems);
+    public void addtocart() {
+        String choice;
+        do {
+            try {
+                boolean idMatch = false;
+                FileWriter Fw = new FileWriter("cartData.txt");
+                Scanner fileread = new Scanner(new File("productsData.txt"));
+
+                System.out.println("\nEnter Product id to add in cart: ");
+                id = input.nextInt();
+
+                while (fileread.hasNextLine()) {
+                    String line = fileread.nextLine();
+                    String[] parts = line.split(",");
+                    int ID = Integer.parseInt(parts[0]);
+                    int stock = Integer.parseInt(parts[3]);
+                    int qty;
+                    if (id == ID) {
+                    do{
+                    System.out.println("\nEnter Qty to add in cart: ");
+                     qty = input.nextInt();
+                    if (qty <= stock) {
+                        input.nextLine();
+                    }
+                    else{
+                        System.out.println("Availale Stock: "+stock);
+                    }
+                    }while(qty>stock);
+                    idMatch = true;
+                    double price = Double.parseDouble(parts[2]);
+                    double total = price * qty;
+                    Fw.write(id + "," + parts[1] + "," + qty + "," + total + "\n");
+                    System.out.println("Enter \"Y\" to add more \"N\" for exit.");
+                        break;
+                    }
+                }
+                Fw.close();
+                fileread.close();
+
+                if (!idMatch) {
+                    System.out.println("Product Id not found");
+                    return;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Enter Valid Input");
+            } catch (IOException e) {
+                System.out.println("Product fail to add");
+            } catch (Exception e) {
+                System.out.println("Error " + e);
+            }
+
+            choice = input.nextLine();
+        } while (!choice.equalsIgnoreCase("n"));
     }
 
-    public void viewcart(orderitem orderitems) {
-        if (Orderitems.size() > 0) {
-            System.out.println("Cart is empty yet");
+    public void viewcart() {
+        try {
+            Scanner fileread = new Scanner(new File("cartData.txt"));
+            int i = 1;
+            while (fileread.hasNextLine()) {
+                String line = fileread.nextLine();
+                String[] parts = line.split(",");
+
+                System.out.println("\n******** Product " + i + " ********");
+                System.out.println("Name: " + parts[1]);
+                System.out.println("Qty: " + parts[2]);
+                System.out.println("Total: " + parts[3] + "\n");
+                i++;
+            }
+        } catch (IOException e) {
+            System.out.println("Error to read " + e);
+        } catch (Exception e) {
+            System.out.println("Error " + e);
         }
-        for (int i = 0; i < Orderitems.size(); i++) {
-            orderitems = Orderitems.get(i);
-            System.out.println("\nProduct: " + (i + 1));
-            System.out.println("Name: " + orderitems.getProductname());
-            System.out.println("Stock Qty: " + orderitems.getQuantity() + "\n");
-        }
+    }
+
+    public void checkout() {
+
     }
 }
