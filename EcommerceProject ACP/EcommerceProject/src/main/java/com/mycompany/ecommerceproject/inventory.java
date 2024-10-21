@@ -1,18 +1,18 @@
 
-package com.mycompany.ecommerceproject;
+// package com.mycompany.ecommerceproject;
 
-import java.util.ArrayList;
+// import java.util.ArrayList;
 
 
-public class inventory {
+// public class inventory {
 
-    private ArrayList<product> products = new ArrayList<>();
+//     private ArrayList<product> products = new ArrayList<>();
 
-    public void addproduct(product Products) {
-        products.add(Products);
-    }
+//     public void addproduct(product Products) {
+//         products.add(Products);
+//     }
 
-    public ArrayList<product> returnproducts() {
-        return products;
-    }
-}
+//     public ArrayList<product> returnproducts() {
+//         return products;
+//     }
+// }
