@@ -1,7 +1,7 @@
 
-package com.mycompany.ecommerceproject;
+// package com.mycompany.ecommerceproject;
 
 
-public class inventorys {
+// public class inventorys {
     
-}
+// }
