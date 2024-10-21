@@ -1,20 +1,17 @@
+
 package com.mycompany.ecommerceproject;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-
 public class EcommerceProject {
     static Scanner input= new Scanner(System.in);
     
-    public static void main(String[] args) {
-        inventory sharedInventory = new inventory();
-        user users = new user();
-        product p1 = new product(1, "Lays", 10, 25);
-        product p2 = new product(2, "Pepsi", 15, 20);
-        sharedInventory.addproduct(p1);
-        sharedInventory.addproduct(p2);
+    public static void main(String[] args) 
+    {
+        user users;
        
+        
         int choice=0;
         do{
             mainmenu();
@@ -22,16 +19,19 @@ public class EcommerceProject {
                 choice = input.nextInt();
                 switch (choice) {
                     case 1:
+                        users = new customer();
                         users.register();
                         break;
                     case 2:
-                        users.login(sharedInventory);
+                        users = new customer();
+                        users.login();
                         break;
                     case 3:
-                        users.adminlogin(sharedInventory);
+                        users = new admin();
+                        users.login();
                         break;
                     case 4:
-                        System.out.println("Exit.....");
+                        System.out.println("Good Bye.....\n");
                         break;
                     default:
                         System.out.println("Enter correct choice");
@@ -46,9 +46,9 @@ public class EcommerceProject {
     
     public static void mainmenu(){
         System.out.println("Press 1 for Register");
-        System.out.println("Press 2 for login");
-        System.out.println("Press 3 for Admin login");
-        System.out.println("Press 4 for exit");        
+        System.out.println("Press 2 for Customer login");
+        System.out.println("Press 3 for Admin Login");
+        System.out.println("Press 4 for Exit");        
     }  
     
 }
