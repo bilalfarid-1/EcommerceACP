@@ -1,23 +1,19 @@
 
 package com.mycompany.ecommerceproject;
 
-import java.util.ArrayList;
+import java.io.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 
-public class admin extends user {
-
+public class admin  extends user {
+    private product Product = new product();
     static Scanner input = new Scanner(System.in);
-
-    public admin() {
+    
+    public admin() {        
     }
-
-    public admin(String username, String password) {
-        super(username, password);
-    }
-
-    public void displaymenu(inventory inventorys) {
+    
+    public void menu() {
         int choice;
         do {
             System.out.println("Enter 1 for add product");
@@ -26,9 +22,9 @@ public class admin extends user {
             choice = input.nextInt();
 
             if (choice == 1) {
-                productsadd(inventorys);
+                saveProducts();
             } else if (choice == 2) {
-                viewallproducts(inventorys);
+                Product.viewallproducts();
             } else if (choice == 3) {
                 System.out.println("Exit...\n");
             } else {
@@ -36,59 +32,77 @@ public class admin extends user {
             }
 
         } while (choice != 3);
-
     }
+    
+    @Override
+     public void login() {
+        System.out.println("Enter Admin Username:");
+        username=input.next();
+        System.out.println("Enter Admin Password:");
+        password=input.next();
+        
+        if (matchCredentials(username, password, "adminData.txt")) {
+            System.out.println("\nYou logged in as Admin...\n");
+            menu();
+        } else {
+            System.out.println("Invalid credentials.");
+        }
+    }
+    
+    @Override
+    public void register(){
+        
+    } 
+    
 
-    public void viewallproducts(inventory inventorys) {
-        ArrayList<product> products = inventorys.returnproducts();
-        for (int i = 0; i < products.size(); i++) {
-            System.out.println("\nProduct " + (i + 1));
-            product Products = products.get(i);
-            System.out.println("Id " + Products.getId());
-            System.out.println("Name " + Products.getName());
-            System.out.println("Price " + Products.getPrice());
-            System.out.println("Stock Qty " + Products.getStockQuantity() + "\n");
 
+    
+    public void saveProducts() {
+        int id = 0, stockQuantity;
+        String name, choice;
+        double price;
+
+        try (Scanner fileread = new Scanner(new File("productsData.txt"))) {
+            boolean hasData = false; 
+
+            while (fileread.hasNextLine()) {
+                hasData = true;
+                String line = fileread.nextLine();
+                String[] parts = line.split(",");
+                id = Integer.parseInt(parts[0]);
+            }
+
+            if (!hasData) {
+                id = 0;
+            }
+        } catch (IOException e) {
+            id = 0; 
         }
 
-    }
+        try (FileWriter fw = new FileWriter("productsData.txt", true)) {
+            do {
+                id++;
+                System.out.println("Enter Name");
+                input.nextLine();  
+                name = input.nextLine(); 
 
-    public void productsadd(inventory inventorys) {
-        int id, stockQuantity;
-        String name, choice="Y";
-        double price;
-        ArrayList<product> Products = inventorys.returnproducts();
-        do {
-            try{
-            id = Products.size() + 1;
+                System.out.println("Enter Price");
+                price = input.nextDouble();
 
-            System.out.println("Enter Name");
-            name = input.next();
+                System.out.println("Enter Stock Quantity");
+                stockQuantity = input.nextInt();
 
-            System.out.println("Enter Price");
-            
-            price = input.nextDouble();           
+                fw.write(id + "," + name + "," + price + "," + stockQuantity + "\n");
 
-            System.out.println("Enter Stock Quantity");
-            stockQuantity = input.nextInt();
+                System.out.println("\nEnter \"Y\" to add more or \"N\" for exit");
+                choice = input.next();
+            } while (!choice.equalsIgnoreCase("N"));
 
-            product products = new product(id, name, price, stockQuantity);
-            inventorys.addproduct(products);
-            
-            System.out.println("\nEnter \"Y\" to add more \"N\" for exit");
-            choice = input.next();
-            } catch (InputMismatchException ex) {
+        } catch (InputMismatchException ex) {
             System.out.println("Invalid input. Please enter the correct data again.");
-            input.next();  
-            
-            if (choice.equalsIgnoreCase("N")) {
-                System.out.println("Bye...");
-            }
-            } catch (Exception ex) {
-                System.out.println("An error occurred: " + ex.getMessage());
-            }
-            
-        } while (!choice.equalsIgnoreCase("N"));
+            input.next(); 
+        } catch (Exception ex) {
+            System.out.println("An error occurred: " + ex.getMessage());
+        }
     }
-
 }
